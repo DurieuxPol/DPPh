@@ -7,7 +7,6 @@ Class {
 		'initSample',
 		'nbIter',
 		'timeMax',
-		'modeDic',
 		'samplerMode'
 	],
 	#category : 'DPP',
@@ -25,6 +24,23 @@ DppSamplerMcmc >> checkRandom: randomObject [
 		self error: 'Given parameter cannot be used as seed for Random' ]
 ]
 
+{ #category : 'accessing - defaults' }
+DppSamplerMcmc >> defaultNumberOfIterations [
+
+	^ 10
+]
+
+{ #category : 'handling' }
+DppSamplerMcmc >> handleArguments: aCollection [
+
+	randomState := self checkRandom: aCollection first.
+	initSample := aCollection second.
+	nbIter := aCollection third
+		          ifNil: [ self defaultNumberOfIterations ]
+		          ifNotNil: [ aCollection third ].
+	timeMax := aCollection fourth
+]
+
 { #category : 'accessing' }
 DppSamplerMcmc >> initSample [
 
@@ -37,12 +53,6 @@ DppSamplerMcmc >> initSample: anObject [
 	initSample := anObject
 ]
 
-{ #category : 'initialization' }
-DppSamplerMcmc >> initialize [
-
-	nbIter := 10
-]
-
 { #category : 'accessing' }
 DppSamplerMcmc >> kernel [
 
@@ -53,12 +63,6 @@ DppSamplerMcmc >> kernel [
 DppSamplerMcmc >> kernel: anObject [
 
 	kernel := anObject
-]
-
-{ #category : 'accessing' }
-DppSamplerMcmc >> modeDic [
-
-	^ modeDic
 ]
 
 { #category : 'accessing' }
@@ -76,15 +80,12 @@ DppSamplerMcmc >> nbIter: anObject [
 { #category : 'private' }
 DppSamplerMcmc >> passParametersToSampler [
 
-	| rng |
-	rng := self checkRandom: randomState.
 	samplerMode
 		kernel: kernel;
+		randomState: randomState;
+		initSample: initSample;
 		nbIter: nbIter;
-		timeMax: timeMax;
-		randomState: rng.
-	initSample ifNil: [ initSample := samplerMode initializeInitSample ].
-	samplerMode initSample: initSample
+		timeMax: timeMax
 ]
 
 { #category : 'accessing' }
@@ -99,7 +100,7 @@ DppSamplerMcmc >> randomState: anObject [
 	randomState := anObject
 ]
 
-{ #category : 'sample' }
+{ #category : 'sampling' }
 DppSamplerMcmc >> sample [
 
 	^ samplerMode sample

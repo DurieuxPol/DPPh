@@ -21,11 +21,12 @@ FiniteDPP >> kernel: anObject [
 ]
 
 { #category : 'sample methods' }
-FiniteDPP >> sampleMcmc: mode [
+FiniteDPP >> sampleMcmc: mode withArgs: aCollection [
 
 	| mcmcSampler |
 	mcmcSampler := DppSamplerMcmc new
 		               kernel: kernel;
+		               handleArguments: aCollection;
 		               samplerMode: mode.
 	^ mcmcSampler sample last
 ]

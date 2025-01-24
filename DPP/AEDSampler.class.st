@@ -110,6 +110,7 @@ AEDSampler >> initializeForIteration [
 { #category : 'sample' }
 AEDSampler >> initializeForSampling [
 
+	initSample ifNil: [ initSample := self initializeInitSample ].
 	sample0 := initSample.
 	detSample0 := kernel
 		              determinantWithRows: initSample
