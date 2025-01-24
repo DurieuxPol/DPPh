@@ -40,16 +40,7 @@ DppSamplerMcmc >> initSample: anObject [
 { #category : 'initialization' }
 DppSamplerMcmc >> initialize [
 
-	nbIter := 10.
-	self initializeModeDic
-]
-
-{ #category : 'private' }
-DppSamplerMcmc >> initializeModeDic [
-
-	modeDic := Dictionary
-		           newFromKeys: #( #aed )
-		           andValues: { AEDSampler new }
+	nbIter := 10
 ]
 
 { #category : 'accessing' }
@@ -121,9 +112,9 @@ DppSamplerMcmc >> samplerMode [
 ]
 
 { #category : 'accessing' }
-DppSamplerMcmc >> samplerMode: aString [
+DppSamplerMcmc >> samplerMode: aSamplerMode [
 
-	samplerMode := modeDic at: aString.
+	samplerMode := aSamplerMode new.
 	self passParametersToSampler
 ]
 

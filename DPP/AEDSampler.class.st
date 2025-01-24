@@ -98,7 +98,8 @@ AEDSampler >> initializeForIteration [
 	sample1 := sample0 copy.
 	indice := randomState nextInteger:
 		          (sizeSample0 ifNotNil: [ sizeSample0 ] ifNil: [ n ]).
-	groundSetCopy := groundSet copy removeAll: sample0.
+	groundSetCopy := groundSet copy.
+	groundSetCopy removeAll: sample0.
 	randomElem := groundSetCopy atRandom: randomState.
 	percent := randomState next.
 	ratio := sizeSample0 / n.
