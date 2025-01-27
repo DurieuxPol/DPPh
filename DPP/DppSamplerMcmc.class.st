@@ -32,6 +32,7 @@ DppSamplerMcmc >> defaultNumberOfIterations [
 
 { #category : 'handling' }
 DppSamplerMcmc >> handleArguments: aCollection [
+	"aCollection should always be of size at least 4. Elements of the collection can be nil"
 
 	randomState := self checkRandom: aCollection first.
 	initSample := aCollection second.
