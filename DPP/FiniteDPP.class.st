@@ -23,12 +23,7 @@ FiniteDPP >> kernel: anObject [
 { #category : 'sample methods' }
 FiniteDPP >> sampleMcmc: mode [
 
-	| mcmcSampler |
-	mcmcSampler := DppSamplerMcmc new
-		               kernel: kernel;
-		               handleArguments: { nil. nil. nil. nil };
-		               samplerMode: mode.
-	^ mcmcSampler sample last
+	^ self sampleMcmc: mode withArgs: { nil. nil. nil. nil }
 ]
 
 { #category : 'sample methods' }
