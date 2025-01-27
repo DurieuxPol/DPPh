@@ -2,11 +2,24 @@ Class {
 	#name : 'FiniteDPP',
 	#superclass : 'Object',
 	#instVars : [
-		'kernel'
+		'kernel',
+		'listOfSamples'
 	],
 	#category : 'DPP',
 	#package : 'DPP'
 }
+
+{ #category : 'flushing' }
+FiniteDPP >> flushSamples [
+
+	listOfSamples := {  } asOrderedCollection
+]
+
+{ #category : 'initialization' }
+FiniteDPP >> initialize [
+
+	listOfSamples := {  } asOrderedCollection
+]
 
 { #category : 'accessing' }
 FiniteDPP >> kernel [
@@ -20,6 +33,18 @@ FiniteDPP >> kernel: anObject [
 	kernel := anObject
 ]
 
+{ #category : 'accessing' }
+FiniteDPP >> listOfSamples [
+
+	^ listOfSamples
+]
+
+{ #category : 'accessing' }
+FiniteDPP >> listOfSamples: anObject [
+
+	listOfSamples := anObject
+]
+
 { #category : 'sample methods' }
 FiniteDPP >> sampleMcmc: mode [
 
@@ -29,10 +54,12 @@ FiniteDPP >> sampleMcmc: mode [
 { #category : 'sample methods' }
 FiniteDPP >> sampleMcmc: mode withArgs: aCollection [
 
-	| mcmcSampler |
+	| mcmcSampler sample |
 	mcmcSampler := DppSamplerMcmc new
 		               kernel: kernel;
 		               handleArguments: aCollection;
 		               samplerMode: mode.
-	^ mcmcSampler sample last
+	sample := mcmcSampler sample.
+	listOfSamples addAll: sample.
+	^ sample last
 ]
