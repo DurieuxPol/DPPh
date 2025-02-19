@@ -9,6 +9,20 @@ Class {
 	#package : 'DPP'
 }
 
+{ #category : 'instance creation' }
+FiniteDPP class >> correlation: kernel [
+
+	^ self new kernel: kernel
+]
+
+{ #category : 'instance creation' }
+FiniteDPP class >> correlationWithEigenValues: values andVectors: vectors [
+
+	^ self new kernel:
+		  (PMMatrix rows: vectors * values)
+		  * (PMMatrix rows: vectors) transpose
+]
+
 { #category : 'flushing' }
 FiniteDPP >> flushSamples [
 
