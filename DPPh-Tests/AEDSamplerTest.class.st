@@ -99,6 +99,18 @@ AEDSamplerTest >> testDoubletonAdequation [
 ]
 
 { #category : 'tests' }
+AEDSamplerTest >> testNoDuplicates [
+
+	| list sum |
+	list := samples collect: [ :sampl | sampl asSet size = sampl size ].
+	sum := list sum: [ :elem |
+		       elem
+			       ifTrue: [ 1 ]
+			       ifFalse: [ 0 ] ].
+	self assert: sum equals: list size
+]
+
+{ #category : 'tests' }
 AEDSamplerTest >> testSingletonAdequation [
 
 	| theoricProbabilities observedData observedDistribution criticalValue degreesOfFreedom pvalue singletons |
