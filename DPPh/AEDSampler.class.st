@@ -3,12 +3,6 @@ Class {
 	#superclass : 'SamplerMode',
 	#instVars : [
 		'groundSet',
-		'n',
-		'sample0',
-		'detSample0',
-		'sizeSample0',
-		'chain',
-		'timeStart',
 		'sample1',
 		'indice',
 		'randomElem',
@@ -96,16 +90,8 @@ AEDSampler >> initializeForIteration [
 { #category : 'sample' }
 AEDSampler >> initializeForSampling [
 
-	n := kernel numberOfRows.
 	groundSet := (1 to: n) asOrderedCollection.
-	initSample ifNil: [ initSample := self initializeInitSample ].
-	sample0 := initSample.
-	detSample0 := kernel
-		              determinantWithRows: initSample
-		              andColumns: initSample.
-	sizeSample0 := sample0 size.
-	chain := { sample0 } asOrderedCollection.
-	timeStart := timeMax ifNil: [ 0 ] ifNotNil: [ Time current ]
+	super initializeForSampling
 ]
 
 { #category : 'initialization' }

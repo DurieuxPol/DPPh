@@ -6,7 +6,13 @@ Class {
 		'nbIter',
 		'initSample',
 		'timeMax',
-		'randomState'
+		'randomState',
+		'n',
+		'sample0',
+		'detSample0',
+		'sizeSample0',
+		'chain',
+		'timeStart'
 	],
 	#category : 'DPPh',
 	#package : 'DPPh'
@@ -25,6 +31,19 @@ SamplerMode >> initSample: anObject [
 ]
 
 { #category : 'initialization' }
+SamplerMode >> initializeForSampling [
+
+	initSample ifNil: [ initSample := self initializeInitSample ].
+	sample0 := initSample.
+	detSample0 := kernel
+		              determinantWithRows: initSample
+		              andColumns: initSample.
+	sizeSample0 := sample0 size.
+	chain := { sample0 } asOrderedCollection.
+	timeStart := timeMax ifNil: [ 0 ] ifNotNil: [ Time current ]
+]
+
+{ #category : 'initialization' }
 SamplerMode >> initializeInitSample [
 
 	^ self subclassResponsibility
@@ -39,7 +58,14 @@ SamplerMode >> kernel [
 { #category : 'accessing' }
 SamplerMode >> kernel: anObject [
 
-	kernel := anObject
+	kernel := anObject.
+	n := kernel numberOfRows.
+]
+
+{ #category : 'accessing' }
+SamplerMode >> n [
+
+	^ n
 ]
 
 { #category : 'accessing' }
