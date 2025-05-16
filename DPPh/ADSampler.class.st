@@ -34,7 +34,7 @@ ADSampler >> sample [
 		randomState next < 0.5
 			ifTrue: [
 				sample1 := sample0 copy.
-				item := randomState choice: n size: 1 replace: true.
+				item := randomState nextInteger: n.
 				(sample1 includes: item)
 					ifTrue: [ sample1 remove: item ]
 					ifFalse: [ sample1 add: item ].

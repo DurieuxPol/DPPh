@@ -1,12 +1,12 @@
 Class {
-	#name : 'AEDSamplerTest',
+	#name : 'ADSamplerTest',
 	#superclass : 'McmcSamplerTest',
 	#category : 'DPPh-Tests',
 	#package : 'DPPh-Tests'
 }
 
 { #category : 'accessing' }
-AEDSamplerTest >> classToTest [
+ADSamplerTest >> classToTest [
 
-	^ AEDSampler
+	^ ADSampler
 ]
