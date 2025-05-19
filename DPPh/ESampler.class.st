@@ -11,29 +11,22 @@ ESampler >> initSampleDraw: sampleSize [
 	^ randomState choice: kernelSize size: sampleSize replace: false
 ]
 
-{ #category : 'initialization' }
-ESampler >> initializeForSampling [
-
-	super initializeForSampling.
-	samplesChain := PMMatrix zerosRows: nbIter cols: sample0Size.
-	samplesChain atRow: 1 put: sample0
-]
-
 { #category : 'sample' }
 ESampler >> sample [
 
-	| sample1 item sample1Det |
+	| sample1 sample1Det index t |
 	self initializeForSampling.
 
 	1 to: nbIter - 1 do: [ :i |
 		randomState next < 0.5
 			ifTrue: [
 				sample1 := sample0 copy.
-				item := randomState nextInteger: kernelSize.
-				(sample1 includes: item)
-					ifTrue: [ sample1 remove: item ]
-					ifFalse: [ sample1 add: item ].
-
+				index := randomState nextInteger: sample0Size.
+				t := randomState
+					     choice: (groundSet copy removeAll: sample0)
+					     size: 1
+					     replace: false.
+				sample1 atRow: index put: t.
 				sample1Det := kernel
 					              determinantWithRows: sample1
 					              andColumns: sample1.
