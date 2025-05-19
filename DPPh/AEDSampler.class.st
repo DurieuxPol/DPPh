@@ -2,13 +2,13 @@ Class {
 	#name : 'AEDSampler',
 	#superclass : 'SamplerMode',
 	#instVars : [
-		'groundSet',
 		'sample1',
 		'indice',
 		'randomElem',
 		'addCondition',
 		'exchangeCondition',
-		'deleteCondition'
+		'deleteCondition',
+		'sample1Det'
 	],
 	#category : 'DPPh',
 	#package : 'DPPh'
@@ -17,48 +17,56 @@ Class {
 { #category : 'adding' }
 AEDSampler >> add [
 
-	| detSample1 |
 	sample1 add: randomElem.
-	detSample1 := kernel determinantWithRows: sample1 andColumns: sample1.
-	randomState next
-	< (detSample1 / detSample0 * (sizeSample0 + 1) / (n - sizeSample0))
+	sample1Det := kernel determinantWithRows: sample1 andColumns: sample1.
+	randomState next < (sample1Det / sample0Det * (sample0Size + 1)
+	 / (kernelSize - sample0Size))
 		ifTrue: [
 			sample0 := sample1.
-			detSample0 := detSample1.
-			chain add: sample1.
-			sizeSample0 := sizeSample0 + 1 ]
-		ifFalse: [ chain add: sample0 ]
+			sample0Det := sample1Det.
+			samplesChain add: sample1.
+			sample0Size := sample0Size + 1 ]
+		ifFalse: [ samplesChain add: sample0 ]
 ]
 
 { #category : 'deleting' }
 AEDSampler >> delete [
 
-	| detSample1 |
 	sample1 removeAt: indice.
-	detSample1 := kernel determinantWithRows: sample1 andColumns: sample1.
-	randomState next
-	< (detSample1 / detSample0 * sizeSample0 / (n - (sizeSample0 - 1)))
+	sample1Det := kernel determinantWithRows: sample1 andColumns: sample1.
+	randomState next < (sample1Det / sample0Det * sample0Size
+	 / (kernelSize - (sample0Size - 1)))
 		ifTrue: [
 			sample0 := sample1.
-			detSample0 := detSample1.
-			chain add: sample1.
-			sizeSample0 := sizeSample0 - 1 ]
-		ifFalse: [ chain add: sample0 ]
+			sample0Det := sample1Det.
+			samplesChain add: sample1.
+			sample0Size := sample0Size - 1 ]
+		ifFalse: [ samplesChain add: sample0 ]
 ]
 
 { #category : 'exchanging' }
 AEDSampler >> exchange [
 
-	| detSample1 |
 	sample1 removeAt: indice.
 	sample1 add: randomElem.
-	detSample1 := kernel determinantWithRows: sample1 andColumns: sample1.
-	randomState next < (detSample1 / detSample0)
+	sample1Det := kernel determinantWithRows: sample1 andColumns: sample1.
+	randomState next < (sample1Det / sample0Det)
 		ifTrue: [
 			sample0 := sample1.
-			detSample0 := detSample1.
-			chain add: sample1 ]
-		ifFalse: [ chain add: sample0 ]
+			sample0Det := sample1Det.
+			samplesChain add: sample1 ]
+		ifFalse: [ samplesChain add: sample0 ]
+]
+
+{ #category : 'as yet unclassified' }
+AEDSampler >> initSampleDraw: sampleSize [
+
+	| intermediateSample |
+	intermediateSample := randomState
+		                      choice: 2 * kernelSize
+		                      size: kernelSize
+		                      replace: false.
+	^ intermediateSample intersection: groundSet
 ]
 
 { #category : 'initialization' }
@@ -77,41 +85,14 @@ AEDSampler >> initializeForIteration [
 	| groundSetCopy percent ratio |
 	sample1 := sample0 copy.
 	indice := randomState nextInteger:
-		          (sizeSample0 = 0 | sizeSample0 isNil ifFalse: [ sizeSample0 ] ifTrue: [ n ]).
+		          (sample0Size = 0 | sample0Size isNil ifFalse: [ sample0Size ] ifTrue: [ kernelSize ]).
 	groundSetCopy := groundSet copy.
 	groundSetCopy removeAll: sample0.
 	randomElem := groundSetCopy atRandom: randomState.
 	percent := randomState next.
-	ratio := sizeSample0 / n.
+	ratio := sample0Size / kernelSize.
 
 	self initializeConditionsWith: percent and: ratio
-]
-
-{ #category : 'sample' }
-AEDSampler >> initializeForSampling [
-
-	groundSet := (1 to: n) asOrderedCollection.
-	super initializeForSampling
-]
-
-{ #category : 'initialization' }
-AEDSampler >> initializeInitSample [
-
-	| sample detSample nbTrials tol t |
-	sample := {  } asOrderedCollection.
-	detSample := 0.
-	nbTrials := 100.
-	tol := 10 ** -9.
-
-	1 to: nbTrials do: [ :i |
-		detSample > tol ifTrue: [ ^ sample ].
-		t := randomState choice: 2 * n size: n replace: false.
-		sample := t intersection: groundSet.
-		detSample := kernel determinantWithRows: sample andColumns: sample ].
-
-	^ Error signal: 'After ' , nbTrials printString
-		  , ' trials, no initial set s0 satisfies det Ls0 > '
-		  , tol printString
 ]
 
 { #category : 'sample' }
@@ -129,10 +110,10 @@ AEDSampler >> sample [
 		deleteCondition ifTrue: [ self delete ].
 
 		addCondition | exchangeCondition | deleteCondition ifFalse: [
-			chain add: sample0 ].
+			samplesChain add: sample0 ].
 
 		timeMax ifNotNil: [
-			Time current - timeStart >= timeMax ifTrue: [ ^ chain ] ] ].
+			Time current - timeStart >= timeMax ifTrue: [ ^ samplesChain ] ] ].
 
-	^ chain
+	^ samplesChain
 ]

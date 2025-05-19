@@ -5,6 +5,7 @@ Class {
 		'kernel',
 		'randomState',
 		'initSample',
+		'initSampleSize',
 		'nbIter',
 		'timeMax',
 		'samplerMode'
@@ -35,10 +36,11 @@ DppSamplerMcmc >> handleArguments: aCollection [
 
 	randomState := self checkRandom: aCollection first.
 	initSample := aCollection second.
-	nbIter := aCollection third
+	initSampleSize := aCollection third.
+	nbIter := aCollection fourth
 		          ifNil: [ self defaultNumberOfIterations ]
-		          ifNotNil: [ aCollection third ].
-	timeMax := aCollection fourth
+		          ifNotNil: [ aCollection fourth ].
+	timeMax := aCollection fifth
 ]
 
 { #category : 'accessing' }
@@ -51,6 +53,18 @@ DppSamplerMcmc >> initSample [
 DppSamplerMcmc >> initSample: anObject [
 
 	initSample := anObject
+]
+
+{ #category : 'accessing' }
+DppSamplerMcmc >> initSampleSize [
+
+	^ initSampleSize
+]
+
+{ #category : 'accessing' }
+DppSamplerMcmc >> initSampleSize: anObject [
+
+	initSampleSize := anObject
 ]
 
 { #category : 'accessing' }
@@ -84,6 +98,7 @@ DppSamplerMcmc >> passParametersToSampler [
 		kernel: kernel;
 		randomState: randomState;
 		initSample: initSample;
+		initSampleSize: initSampleSize;
 		nbIter: nbIter;
 		timeMax: timeMax
 ]

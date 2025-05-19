@@ -3,16 +3,18 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'kernel',
+		'kernelSize',
+		'groundSet',
 		'nbIter',
 		'initSample',
+		'initSampleSize',
 		'timeMax',
 		'randomState',
-		'n',
 		'sample0',
-		'detSample0',
-		'sizeSample0',
-		'chain',
-		'timeStart'
+		'sample0Det',
+		'sample0Size',
+		'timeStart',
+		'samplesChain'
 	],
 	#category : 'DPPh',
 	#package : 'DPPh'
@@ -30,23 +32,55 @@ SamplerMode >> initSample: anObject [
 	initSample := anObject
 ]
 
+{ #category : 'as yet unclassified' }
+SamplerMode >> initSampleDraw: size [
+
+	^ self subclassResponsibility
+]
+
+{ #category : 'accessing' }
+SamplerMode >> initSampleSize [
+
+	^ initSampleSize
+]
+
+{ #category : 'accessing' }
+SamplerMode >> initSampleSize: anObject [
+
+	initSampleSize := anObject
+]
+
 { #category : 'initialization' }
 SamplerMode >> initializeForSampling [
 
-	initSample ifNil: [ initSample := self initializeInitSample ].
+	groundSet := (1 to: kernelSize) asOrderedCollection.
+	initSample ifNil: [ initSample := self initializeInitSample: initSampleSize ].
 	sample0 := initSample.
-	detSample0 := kernel
+	sample0Det := kernel
 		              determinantWithRows: initSample
 		              andColumns: initSample.
-	sizeSample0 := sample0 size.
-	chain := { sample0 } asOrderedCollection.
+	sample0Size := sample0 size.
+	samplesChain := { sample0 } asOrderedCollection.
 	timeStart := timeMax ifNil: [ 0 ] ifNotNil: [ Time current ]
 ]
 
 { #category : 'initialization' }
-SamplerMode >> initializeInitSample [
+SamplerMode >> initializeInitSample: sampleSize [
 
-	^ self subclassResponsibility
+	| sample sampleDet nbTrials tol |
+	sample := {  } asOrderedCollection.
+	sampleDet := 0.
+	nbTrials := 100.
+	tol := 10 ** -9.
+
+	1 to: nbTrials do: [ :i |
+		sampleDet > tol ifTrue: [ ^ sample ].
+		sample := self initSampleDraw: sampleSize.
+		sampleDet := kernel determinantWithRows: sample andColumns: sample ].
+
+	^ Error signal: 'After ' , nbTrials printString
+		  , ' trials, no initial set s0 satisfies det Ls0 > '
+		  , tol printString
 ]
 
 { #category : 'accessing' }
@@ -59,13 +93,13 @@ SamplerMode >> kernel [
 SamplerMode >> kernel: anObject [
 
 	kernel := anObject.
-	n := kernel numberOfRows.
+	kernelSize := kernel numberOfRows.
 ]
 
 { #category : 'accessing' }
-SamplerMode >> n [
+SamplerMode >> kernelSize [
 
-	^ n
+	^ kernelSize
 ]
 
 { #category : 'accessing' }

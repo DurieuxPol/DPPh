@@ -61,12 +61,12 @@ FiniteDPP >> listOfSamples: anObject [
 { #category : 'sample methods' }
 FiniteDPP >> sampleMcmc: mode [
 
-	^ self sampleMcmc: mode withArgs: { nil. nil. nil. nil }
+	^ self sampleMcmc: mode withArgs: { nil. nil. nil. nil . nil }
 ]
 
 { #category : 'sample methods' }
 FiniteDPP >> sampleMcmc: mode withArgs: aCollection [
-	"aCollection should always be of size at least 4 and shaped like: { randomSate . initSample . nbIter . timeMax }. Elements of the collection can be nil"
+	"aCollection should always be of size at least 5 and shaped like: { randomSate . initSample . initSampleSize . nbIter . timeMax }. Elements of the collection can be nil"
 
 	| mcmcSampler sample |
 	mcmcSampler := DppSamplerMcmc new

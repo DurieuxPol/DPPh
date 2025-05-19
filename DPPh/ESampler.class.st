@@ -1,21 +1,26 @@
 Class {
-	#name : 'ADSampler',
+	#name : 'ESampler',
 	#superclass : 'SamplerMode',
 	#category : 'DPPh',
 	#package : 'DPPh'
 }
 
 { #category : 'as yet unclassified' }
-ADSampler >> initSampleDraw: sampleSize [
+ESampler >> initSampleDraw: sampleSize [
 
-	^ randomState
-		  choice: kernelSize
-		  size: (randomState nextInteger: kernelSize + 1)
-		  replace: false
+	^ randomState choice: kernelSize size: sampleSize replace: false
+]
+
+{ #category : 'initialization' }
+ESampler >> initializeForSampling [
+
+	super initializeForSampling.
+	samplesChain := PMMatrix zerosRows: nbIter cols: sample0Size.
+	samplesChain atRow: 1 put: sample0
 ]
 
 { #category : 'sample' }
-ADSampler >> sample [
+ESampler >> sample [
 
 	| sample1 item sample1Det |
 	self initializeForSampling.
