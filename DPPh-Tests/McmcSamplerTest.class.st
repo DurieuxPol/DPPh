@@ -77,7 +77,7 @@ McmcSamplerTest >> setUp [
 	dpp sampleMcmc: self classToTest withArgs: {
 			nil.
 			nil.
-			nil.
+			3.
 			nbIter.
 			nil }.
 	samples := dpp listOfSamples

@@ -26,7 +26,7 @@ ESampler >> sample [
 					     choice: (groundSet copy removeAll: sample0)
 					     size: 1
 					     replace: false.
-				sample1 atRow: index put: t.
+				sample1 at: index put: t first.
 				sample1Det := kernel
 					              determinantWithRows: sample1
 					              andColumns: sample1.
