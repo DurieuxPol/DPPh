@@ -4,11 +4,12 @@ Class {
 	#instVars : [
 		'dpp',
 		'samples',
-		'n',
 		'gen',
 		'nbIter',
 		'tolerance',
-		'chi'
+		'chi',
+		'kernelSize',
+		'args'
 	],
 	#category : 'DPPh-Tests',
 	#package : 'DPPh-Tests'
@@ -58,13 +59,13 @@ McmcSamplerTest >> setUp [
 
 	chi := ChisquareEvaluation new.
 	rank := 6.
-	n := 10.
+	kernelSize := 10.
 	nbIter := 1000.
 	gen := Random new.
 	tolerance := 0.05.
 
 	matrixForEigVecs := PMMatrix
-		                    rows: n
+		                    rows: kernelSize
 		                    columns: rank
 		                    random: 1
 		                    generator: gen.
@@ -74,13 +75,37 @@ McmcSamplerTest >> setUp [
 	dpp := FiniteDPP
 		       correlationWithEigenValues: eigvals
 		       andVectors: eigvecs.
-	dpp sampleMcmc: self classToTest withArgs: {
-			nil.
-			nil.
-			3.
-			nbIter.
-			nil }.
+	args := {
+		        nil.
+		        nil.
+		        (self classToTest = ESampler
+			         ifTrue: [ 3 ]
+			         ifFalse: [ nil ]).
+		        nbIter.
+		        nil }.
+	dpp sampleMcmc: self classToTest withArgs: args.
 	samples := dpp listOfSamples
+]
+
+{ #category : 'tests' }
+McmcSamplerTest >> testCardinality [
+
+	| observedCardinality observedMeanCardinality theoricalMeanCardinality theoricalStandardCardinality |
+	observedCardinality := samples collect: [ :sample | sample size ].
+	observedMeanCardinality := observedCardinality average.
+
+	args third
+		ifNotNil: [
+			observedCardinality do: [ :card |
+				self assert: card equals: args third ] ]
+		ifNil: [
+			theoricalMeanCardinality := dpp kernel tr.
+			theoricalStandardCardinality := (dpp kernel
+			                                 - (dpp kernel * dpp kernel)) tr
+				                                abs sqrt.
+			self assert:
+				(observedMeanCardinality - theoricalMeanCardinality) abs
+				<= theoricalStandardCardinality ]
 ]
 
 { #category : 'tests' }
@@ -90,7 +115,7 @@ McmcSamplerTest >> testDoubletonAdequation [
 	nbDoubleton := 10.
 	doubletons := OrderedCollection new.
 	nbDoubleton timesRepeat: [
-		doubleton := gen choice: n size: 2 replace: false.
+		doubleton := gen choice: kernelSize size: 2 replace: false.
 		doubletons add: doubleton ].
 
 	theoricProbabilities := doubletons collect: [ :d |
@@ -129,7 +154,7 @@ McmcSamplerTest >> testSingletonAdequation [
 
 	| theoricProbabilities observedData observedDistribution criticalValue degreesOfFreedom pvalue singletons |
 	theoricProbabilities := dpp kernel principalDiagonal.
-	singletons := (1 to: n) collect: [ :num |
+	singletons := (1 to: kernelSize) collect: [ :num |
 		              { num } asOrderedCollection ].
 	observedData := self getCountOf: singletons in: samples.
 	observedDistribution := observedData / nbIter asFloat.
@@ -140,7 +165,7 @@ McmcSamplerTest >> testSingletonAdequation [
 	"criticalValue := chi
 		                 criticalValue2For: theoricProbabilities
 		                 and: observedData."
-	degreesOfFreedom := n - 1.
+	degreesOfFreedom := kernelSize - 1.
 	pvalue := chi pvalueFor: criticalValue and: degreesOfFreedom.
 
 	self assert: pvalue > tolerance
