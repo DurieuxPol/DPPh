@@ -1,6 +1,6 @@
 Class {
 	#name : 'BaselineOfDPPh',
-	#superclass : 'Object',
+	#superclass : 'BaselineOf',
 	#category : 'BaselineOfDPPh',
 	#package : 'BaselineOfDPPh'
 }
