@@ -69,7 +69,7 @@ FiniteDPP >> sampleMcmc: mode withArgs: aCollection [
 	"aCollection should always be of size at least 5 and shaped like: { randomSate . initSample . initSampleSize . nbIter . timeMax }. Elements of the collection can be nil"
 
 	| mcmcSampler sample |
-	mcmcSampler := DppSamplerMcmc new
+	mcmcSampler := DPPMcmcSampler new
 		               kernel: kernel;
 		               handleArguments: aCollection;
 		               samplerMode: mode.

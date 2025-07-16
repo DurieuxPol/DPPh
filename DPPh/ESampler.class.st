@@ -1,6 +1,6 @@
 Class {
 	#name : 'ESampler',
-	#superclass : 'SamplerMode',
+	#superclass : 'McmcSamplerMode',
 	#category : 'DPPh',
 	#package : 'DPPh'
 }

@@ -1,5 +1,5 @@
 Class {
-	#name : 'SamplerMode',
+	#name : 'McmcSamplerMode',
 	#superclass : 'Object',
 	#instVars : [
 		'kernel',
@@ -21,37 +21,37 @@ Class {
 }
 
 { #category : 'accessing' }
-SamplerMode >> initSample [
+McmcSamplerMode >> initSample [
 
 	^ initSample
 ]
 
 { #category : 'accessing' }
-SamplerMode >> initSample: anObject [
+McmcSamplerMode >> initSample: anObject [
 
 	initSample := anObject
 ]
 
 { #category : 'as yet unclassified' }
-SamplerMode >> initSampleDraw: size [
+McmcSamplerMode >> initSampleDraw: size [
 
 	^ self subclassResponsibility
 ]
 
 { #category : 'accessing' }
-SamplerMode >> initSampleSize [
+McmcSamplerMode >> initSampleSize [
 
 	^ initSampleSize
 ]
 
 { #category : 'accessing' }
-SamplerMode >> initSampleSize: anObject [
+McmcSamplerMode >> initSampleSize: anObject [
 
 	initSampleSize := anObject
 ]
 
 { #category : 'initialization' }
-SamplerMode >> initializeForSampling [
+McmcSamplerMode >> initializeForSampling [
 
 	groundSet := (1 to: kernelSize) asOrderedCollection.
 	initSample ifNil: [ initSample := self initializeInitSample: initSampleSize ].
@@ -65,7 +65,7 @@ SamplerMode >> initializeForSampling [
 ]
 
 { #category : 'initialization' }
-SamplerMode >> initializeInitSample: sampleSize [
+McmcSamplerMode >> initializeInitSample: sampleSize [
 
 	| sample sampleDet nbTrials tol |
 	sample := {  } asOrderedCollection.
@@ -84,62 +84,62 @@ SamplerMode >> initializeInitSample: sampleSize [
 ]
 
 { #category : 'accessing' }
-SamplerMode >> kernel [
+McmcSamplerMode >> kernel [
 
 	^ kernel
 ]
 
 { #category : 'accessing' }
-SamplerMode >> kernel: anObject [
+McmcSamplerMode >> kernel: anObject [
 
 	kernel := anObject.
 	kernelSize := kernel numberOfRows.
 ]
 
 { #category : 'accessing' }
-SamplerMode >> kernelSize [
+McmcSamplerMode >> kernelSize [
 
 	^ kernelSize
 ]
 
 { #category : 'accessing' }
-SamplerMode >> nbIter [
+McmcSamplerMode >> nbIter [
 
 	^ nbIter
 ]
 
 { #category : 'accessing' }
-SamplerMode >> nbIter: anObject [
+McmcSamplerMode >> nbIter: anObject [
 
 	nbIter := anObject
 ]
 
 { #category : 'accessing' }
-SamplerMode >> randomState [
+McmcSamplerMode >> randomState [
 
 	^ randomState
 ]
 
 { #category : 'accessing' }
-SamplerMode >> randomState: anObject [
+McmcSamplerMode >> randomState: anObject [
 
 	randomState := anObject
 ]
 
 { #category : 'sample' }
-SamplerMode >> sample [
+McmcSamplerMode >> sample [
 
 	^ self subclassResponsibility
 ]
 
 { #category : 'accessing' }
-SamplerMode >> timeMax [
+McmcSamplerMode >> timeMax [
 
 	^ timeMax
 ]
 
 { #category : 'accessing' }
-SamplerMode >> timeMax: anObject [
+McmcSamplerMode >> timeMax: anObject [
 
 	timeMax := anObject
 ]

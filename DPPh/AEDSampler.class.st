@@ -1,6 +1,6 @@
 Class {
 	#name : 'AEDSampler',
-	#superclass : 'SamplerMode',
+	#superclass : 'McmcSamplerMode',
 	#instVars : [
 		'sample1',
 		'indice',

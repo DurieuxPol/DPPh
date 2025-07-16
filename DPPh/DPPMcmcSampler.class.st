@@ -1,5 +1,5 @@
 Class {
-	#name : 'DppSamplerMcmc',
+	#name : 'DPPMcmcSampler',
 	#superclass : 'Object',
 	#instVars : [
 		'kernel',
@@ -15,7 +15,7 @@ Class {
 }
 
 { #category : 'checking' }
-DppSamplerMcmc >> checkRandom: randomObject [
+DPPMcmcSampler >> checkRandom: randomObject [
 
 	randomObject ifNil: [ ^ Random seed: 42 ]. "Arbitrarily chosen seed"
 	randomObject class = Random ifTrue: [ ^ randomObject ].
@@ -26,13 +26,13 @@ DppSamplerMcmc >> checkRandom: randomObject [
 ]
 
 { #category : 'accessing - defaults' }
-DppSamplerMcmc >> defaultNumberOfIterations [
+DPPMcmcSampler >> defaultNumberOfIterations [
 
 	^ 10
 ]
 
 { #category : 'handling' }
-DppSamplerMcmc >> handleArguments: aCollection [
+DPPMcmcSampler >> handleArguments: aCollection [
 
 	randomState := self checkRandom: aCollection first.
 	initSample := aCollection second.
@@ -44,55 +44,55 @@ DppSamplerMcmc >> handleArguments: aCollection [
 ]
 
 { #category : 'accessing' }
-DppSamplerMcmc >> initSample [
+DPPMcmcSampler >> initSample [
 
 	^ initSample
 ]
 
 { #category : 'accessing' }
-DppSamplerMcmc >> initSample: anObject [
+DPPMcmcSampler >> initSample: anObject [
 
 	initSample := anObject
 ]
 
 { #category : 'accessing' }
-DppSamplerMcmc >> initSampleSize [
+DPPMcmcSampler >> initSampleSize [
 
 	^ initSampleSize
 ]
 
 { #category : 'accessing' }
-DppSamplerMcmc >> initSampleSize: anObject [
+DPPMcmcSampler >> initSampleSize: anObject [
 
 	initSampleSize := anObject
 ]
 
 { #category : 'accessing' }
-DppSamplerMcmc >> kernel [
+DPPMcmcSampler >> kernel [
 
 	^ kernel
 ]
 
 { #category : 'accessing' }
-DppSamplerMcmc >> kernel: anObject [
+DPPMcmcSampler >> kernel: anObject [
 
 	kernel := anObject
 ]
 
 { #category : 'accessing' }
-DppSamplerMcmc >> nbIter [
+DPPMcmcSampler >> nbIter [
 
 	^ nbIter
 ]
 
 { #category : 'accessing' }
-DppSamplerMcmc >> nbIter: anObject [
+DPPMcmcSampler >> nbIter: anObject [
 
 	nbIter := anObject
 ]
 
 { #category : 'private' }
-DppSamplerMcmc >> passParametersToSampler [
+DPPMcmcSampler >> passParametersToSampler [
 
 	samplerMode
 		kernel: kernel;
@@ -104,44 +104,44 @@ DppSamplerMcmc >> passParametersToSampler [
 ]
 
 { #category : 'accessing' }
-DppSamplerMcmc >> randomState [
+DPPMcmcSampler >> randomState [
 
 	^ randomState
 ]
 
 { #category : 'accessing' }
-DppSamplerMcmc >> randomState: anObject [
+DPPMcmcSampler >> randomState: anObject [
 
 	randomState := anObject
 ]
 
 { #category : 'sampling' }
-DppSamplerMcmc >> sample [
+DPPMcmcSampler >> sample [
 
 	^ samplerMode sample
 ]
 
 { #category : 'accessing' }
-DppSamplerMcmc >> samplerMode [
+DPPMcmcSampler >> samplerMode [
 
 	^ samplerMode
 ]
 
 { #category : 'accessing' }
-DppSamplerMcmc >> samplerMode: aSamplerMode [
+DPPMcmcSampler >> samplerMode: aSamplerMode [
 
 	samplerMode := aSamplerMode new.
 	self passParametersToSampler
 ]
 
 { #category : 'accessing' }
-DppSamplerMcmc >> timeMax [
+DPPMcmcSampler >> timeMax [
 
 	^ timeMax
 ]
 
 { #category : 'accessing' }
-DppSamplerMcmc >> timeMax: anObject [
+DPPMcmcSampler >> timeMax: anObject [
 
 	timeMax := anObject
 ]

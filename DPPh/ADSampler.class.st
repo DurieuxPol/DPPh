@@ -1,6 +1,6 @@
 Class {
 	#name : 'ADSampler',
-	#superclass : 'SamplerMode',
+	#superclass : 'McmcSamplerMode',
 	#category : 'DPPh',
 	#package : 'DPPh'
 }
