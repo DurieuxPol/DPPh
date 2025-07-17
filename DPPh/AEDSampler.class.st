@@ -85,10 +85,14 @@ AEDSampler >> initializeForIteration [
 	| groundSetCopy percent ratio |
 	sample1 := sample0 copy.
 	indice := randomState nextInteger:
-		          (sample0Size = 0 | sample0Size isNil ifFalse: [ sample0Size ] ifTrue: [ kernelSize ]).
+		          (sample0Size = 0 | sample0Size isNil
+			           ifFalse: [ sample0Size ]
+			           ifTrue: [ kernelSize ]).
 	groundSetCopy := groundSet copy.
 	groundSetCopy removeAll: sample0.
-	randomElem := groundSetCopy atRandom: randomState.
+	randomElem := groundSetCopy isEmpty
+		              ifTrue: [ nil ]
+		              ifFalse: [ groundSetCopy atRandom: randomState ].
 	percent := randomState next.
 	ratio := sample0Size / kernelSize.
 
